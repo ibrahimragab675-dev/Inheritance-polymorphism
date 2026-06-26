@@ -1,0 +1,109 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+public class DuplicateException : Exception
+{
+    public DuplicateException(string message) : base(message) { }
+}
+
+public class Program
+{
+    public static void Main()
+    {
+        try
+        {
+            Console.WriteLine("Enter integers separated by spaces:");
+            string input = Console.ReadLine();
+            
+            List<int> numbers = ParseIntegers(input);
+            CheckForDuplicates(numbers);
+            
+            Console.WriteLine("All numbers are unique!");
+            Console.WriteLine($"Numbers: {string.Join(", ", numbers)}");
+        }
+        catch (DuplicateException ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+        catch (FormatException)
+        {
+            Console.WriteLine("Error: Invalid input. Please enter valid integers separated by spaces.");
+        }
+    }
+    
+    private static List<int> ParseIntegers(string input)
+    {
+        if (string.IsNullOrWhiteSpace(input))
+        {
+            throw new FormatException("Input cannot be empty.");
+        }
+        
+        return input.Split(' ', StringSplitOptions.RemoveEmptyEntries)
+                    .Select(int.Parse)
+                    .ToList();
+    }
+    
+    private static void CheckForDuplicates(List<int> numbers)
+    {
+        var seen = new HashSet<int>();
+        
+        foreach (int number in numbers)
+        {
+            if (!seen.Add(number))
+            {
+                throw new DuplicateException($"Duplicate number found: {number}");
+            }
+        }
+    }
+}
+
+
+Write a C# program to create a method that takes a string as input and throws an exception if the string does not contain vowels
+
+
+using System;
+using System.Linq;
+
+public class NoVowelException : Exception
+{
+    public NoVowelException(string message) : base(message) { }
+}
+
+public class VowelChecker
+{
+    private const string Vowels = "aeiouAEIOU";
+    
+    public static void CheckForVowels(string input)
+    {
+        if (string.IsNullOrEmpty(input))
+        {
+            throw new NoVowelException("Input string cannot be null or empty.");
+        }
+        
+        if (!input.Any(c => Vowels.Contains(c)))
+        {
+            throw new NoVowelException($"String '{input}' does not contain any vowels.");
+        }
+    }
+    
+    public static void Main()
+    {
+        try
+        {
+            Console.WriteLine("Enter a string to check for vowels:");
+            string input = Console.ReadLine();
+            
+            CheckForVowels(input);
+            Console.WriteLine($"Success! String '{input}' contains vowels.");
+        }
+        catch (NoVowelException ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+    }
+}
+
+
+
+
